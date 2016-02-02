@@ -9,7 +9,7 @@ def fitness_func( chromosome ):
 	score = 0.0
 	product = reduce(mul, chromosome, 1)
 
-	for agene, rgene in zip( str( product ), str( target ) ):
+	for agene, rgene in zip( str( product )[::-1], str( target )[::-1] ):
 		if agene == rgene:
 			score += 1
 
