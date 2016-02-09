@@ -7,9 +7,12 @@ from ga_config import *
 
 def fitness_func( chromosome ):
 	score = 0.0
-	product = reduce(mul, chromosome, 1)
+	product = str( reduce(mul, chromosome, 1) )
+	
+	if len( product ) != target_len:
+		return score # Here score = 0.0 
 
-	for agene, rgene in zip( str( product )[::-1], str( target )[::-1] ):
+	for rgene, agene in zip( target[::-1], product[::-1] ):
 		if agene == rgene:
 			score += 1
 	print(str(chromosome[0])+" "+str(chromosome[1]))		

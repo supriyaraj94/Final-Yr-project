@@ -4,13 +4,14 @@ from pyevolve import Selectors
 from pyevolve import Crossovers
 from pyevolve import Mutators
 
-target = int( input("Enter N: ") )
+target = raw_input( "Enter N: " )
+target_len = len( target )
 
 genome_size = 2
 population_size = 2
 
 arangemin = 0
-arangemax = 50
+arangemax = 10
 
 generation_count = 10
 elitism = 1
