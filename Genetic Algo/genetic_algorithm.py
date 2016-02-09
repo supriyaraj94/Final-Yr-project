@@ -12,8 +12,12 @@ def fitness_func( chromosome ):
 	for agene, rgene in zip( str( product )[::-1], str( target )[::-1] ):
 		if agene == rgene:
 			score += 1
-
+	print(str(chromosome[0])+" "+str(chromosome[1]))		
 	return score
+def ConvergenceCriteria(ga_engine):
+   #print(ga_engine.bestIndividual())
+   print("******");
+   return False	
 
 if __name__ == '__main__':
 	# Genome Instance
@@ -29,7 +33,7 @@ if __name__ == '__main__':
 	ga.selector.set( selector_method )
 	ga.setCrossoverRate( crossover_rate )
 	ga.setMutationRate( mutation_rate )
-	
+	ga.terminationCriteria.set(ConvergenceCriteria)
 	ga.setGenerations( generation_count )	
 	ga.setMultiProcessing( flag = True, full_copy = False )	
 	

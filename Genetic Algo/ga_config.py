@@ -7,12 +7,12 @@ from pyevolve import Mutators
 target = int( input("Enter N: ") )
 
 genome_size = 2
-population_size = 20
+population_size = 2
 
 arangemin = 0
 arangemax = 50
 
-generation_count = 100
+generation_count = 10
 elitism = 1
 crossover_rate = 0.90
 mutation_rate = 0.02

@@ -11,6 +11,7 @@ def getrange():
 	max_num = int('9'*no_of_digits)
 	return [min_num,max_num]	
 def fitness_func( chromosome ):
+	print()
 	score = 0.0
 	product = reduce(mul, chromosome, 1)
 	for agene, rgene in zip( str( product )[::-1], str( target )[::-1] ):
@@ -22,6 +23,7 @@ if __name__ == '__main__':
 # Genome Instance
 	setOfAlleles = GAllele.GAlleles()
 	range_of_numbers = getrange()
+	print(range_of_numbers)
 	a = GAllele.GAlleleRange(range_of_numbers[0],square_root)
 	setOfAlleles.add(a)
 	b = GAllele.GAlleleRange(square_root,range_of_numbers[1])
@@ -39,7 +41,7 @@ if __name__ == '__main__':
 	ga.setCrossoverRate( crossover_rate )
 	ga.setMutationRate( mutation_rate )
 	ga.setGenerations( generation_count )
-	ga.setMultiProcessing( flag = True, full_copy = False )
+	#ga.setMultiProcessing( flag = True, full_copy = False )
 	# ga.terminationCriteria.set(GSimpleGA.ConvergenceCriteria)
 	# ga.initialize() --> Initializes the GA Engine. Create and initialize population
 	ga.evolve( freq_stats = 10)
