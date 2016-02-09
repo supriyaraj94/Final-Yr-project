@@ -1,3 +1,6 @@
+#user-defined crossover/selector
+
+
 from pyevolve import Consts
 from pyevolve import Initializators
 from pyevolve import Selectors
