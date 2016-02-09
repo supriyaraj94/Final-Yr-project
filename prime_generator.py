@@ -3,6 +3,8 @@ import cPickle as pickle
 
 def primesfrom2to(n):
     """ Input n>=6, Returns a array of primes, 2 <= p < n """
+    if(n==1):
+        return []
     sieve = numpy.ones(n/3 + (n%6==2), dtype=numpy.bool)
     for i in xrange(1,int(n**0.5)/3+1):
         if sieve[i]:
