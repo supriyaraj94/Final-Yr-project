@@ -14,12 +14,12 @@ from pyevolve import Util
 target = int( input("Enter N: ") )
 list_width=int(math.ceil(len(str(target))/2.0));
 list_height=2;
-population_size = 20
+population_size = 30
 prime_list=list(set(primesfrom2to(math.pow(10,list_width)))-set(primesfrom2to(math.pow(10,list_width-1))))
 number_of_primes=len(prime_list)
 
 
-generation_count = 30
+generation_count = 100
 elitism = 1
 crossover_rate = 0.6
 mutation_rate = 0.5
@@ -55,6 +55,13 @@ def initializator_method(genome, **args):
         for j in xrange(genome.getWidth()):
             genome.setItem(i, j, l[i][j])
 
+def reinitializator_method(genome, **args):
+    genome.sort()
+    last=genome.internalPop[-1]
+    initializator_method(last)
+    genome.__setitem__(-1,last) 
+    return last           
+
 
 def crossover_method(genome, **args):
    """ The G2DList Uniform Crossover """
@@ -80,10 +87,15 @@ def crossover_method(genome, **args):
 
 def selector_method(population, **args):
   p=random.random()
-  if(p>=0.5):
-    return Selectors.GTournamentSelectorAlternative(population,**args)
+  if(p>=0.7):
+    population= Selectors.GTournamentSelectorAlternative(population,**args)
+  elif(p>=0.3):
+    population= Selectors.GRankSelector(population,**args)
   else:
-    return Selectors.GRankSelector(population,**args)
+    #print(dir(population))
+    #population.clearList()   
+    population=reinitializator_method(population)
+  return population
       
 
 

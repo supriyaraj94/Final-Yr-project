@@ -50,7 +50,7 @@ if __name__ == '__main__':
 	genome.evaluator.set( fitness_func )
 	genome.setParams(rangemin=0, rangemax=9)
 	genome.setParams(bestrawscore=0, rounddecimal=2)
-	genome.setParams(tournamentPool=2)
+	genome.setParams(tournamentPool=5)
 	genome.crossover.set(crossover_method)
 	genome.initializator.set(initializator_method)
 	# Create Genetic Algorithm Engine
