@@ -20,14 +20,7 @@ def fitness_func_similar_digits( chromosome ):
 	for rgene, agene in zip( target[::-1], product[::-1] ):
 		if agene == rgene:
 			score += 1
-<<<<<<< HEAD
-	print(str(chromosome[0])+" "+str(chromosome[1]))		
-	return score
-def ConvergenceCriteria(ga_engine):
-   #print(ga_engine.bestIndividual())
-   print("******");
-   return False	
-=======
+
 
 	return target_len - score
 
@@ -43,7 +36,7 @@ def initial_range( sqrt_target ):
 	q_range = generate_primes(sqrt_target, (10 ** len( str( sqrt_target ) ) - 1))
 
 	return (p_range, q_range)
->>>>>>> master
+
 
 if __name__ == '__main__':
 	# Allele choices

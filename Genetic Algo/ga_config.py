@@ -3,28 +3,16 @@ from pyevolve import Initializators
 from pyevolve import Selectors
 from pyevolve import Crossovers
 from pyevolve import Mutators
-
 import math
 
 target = raw_input( "Enter N: " )
 target_len = len( target )
 sqrt_target = int( math.sqrt( int( target ) ) )
-
 genome_size = 2
-<<<<<<< HEAD
-population_size = 2
-=======
 population_size = 100
->>>>>>> master
-
 arangemin = 0
 arangemax = 10
-
-<<<<<<< HEAD
-generation_count = 10
-=======
 generation_count = 500
->>>>>>> master
 elitism = 1
 crossover_rate = 0.90
 mutation_rate = 0.02
