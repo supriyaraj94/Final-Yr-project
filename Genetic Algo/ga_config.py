@@ -5,13 +5,25 @@ from pyevolve import Crossovers
 from pyevolve import Mutators
 import math
 
+import math
+
 target = raw_input( "Enter N: " )
 target_len = len( target )
 sqrt_target = int( math.sqrt( int( target ) ) )
+<<<<<<< HEAD
 genome_size = 2
 population_size = 100
 arangemin = 0
 arangemax = 10
+=======
+
+genome_size = 2
+population_size = 100
+
+arangemin = 0
+arangemax = 10
+
+>>>>>>> master
 generation_count = 500
 elitism = 1
 crossover_rate = 0.90

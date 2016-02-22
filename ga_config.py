@@ -6,20 +6,23 @@ from pyevolve import Initializators
 from pyevolve import Selectors
 from pyevolve import Crossovers
 from pyevolve import Mutators
-from prime_generator import *
+from primesieve import *
 import random
 import math
 from pyevolve import Util
 
-target = int( input("Enter N: ") )
+target = long( input("Enter N: ") )
 list_width=int(math.ceil(len(str(target))/2.0));
 list_height=2;
-population_size = 30
-prime_list=list(set(primesfrom2to(math.pow(10,list_width)))-set(primesfrom2to(math.pow(10,list_width-1))))
+population_size = 100
+print(math.pow(10,list_width-1))
+print(math.pow(10,list_width))
+prime_list=generate_primes(long(math.pow(10,list_width-1)),long(math.pow(10,list_width)))
+print(len(prime_list))
 number_of_primes=len(prime_list)
 
 
-generation_count = 100
+generation_count = 1000
 elitism = 1
 crossover_rate = 0.6
 mutation_rate = 0.5
