@@ -1,4 +1,5 @@
-#Command line arguments
+# This script takes number of digits as command line argument
+# Example: python semiprimes_factors.py 4 (for 4 digits prime factors)
 import sys
 from primesieve import *
 import cPickle as pickle

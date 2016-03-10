@@ -1,4 +1,6 @@
+# This script takes number of epochs as command line argument, by default takes 500
 import neurolab as nl, numpy as np, rsa, cPickle as pickle
+import sys
 
 with open('public.pem', mode='rb') as publicfile:
 	keydata = publicfile.read()
@@ -13,6 +15,8 @@ p, q = privkey.p, privkey.q
 
 inp = np.array(map(int, str(n)))
 tar = np.array(map(int, str(p)+str(q)))
+# Uncomment below line when output to be fed in binary representation
+##tar = np.array(map(int, list(bin(eval(str(p)+str(q)))[2:])))
 
 num_input_units = len(inp)
 num_output_units = len(tar)
@@ -26,19 +30,23 @@ tar = tar.reshape(1, num_output_units)
 with open("inp_tar.p", "wb") as inptarfile:
 	pickle.dump((inp, tar), inptarfile)
 
-# Create network with n layers and random initialized
+# Create network with n layers
 net = nl.net.newff(minmax, size)
 
 # Change traning func
 net.trainf = nl.train.train_gd
 
-# Change error func
-net.errorf = nl.error.MSE()
+# Change error func, by default uses SSE()
+#net.errorf = nl.error.MSE()
 
 # Change trans funs
 #net.layers[-1].transf = nl.trans.SatLinPrm(k=1, out_min=0, out_max=9)
 
-epochs = 500
+if len(sys.argv) != 1:
+	epochs = int(sys.argv[1])
+else:
+	epochs = 500
+
 # Train network
 error = net.train(inp, tar, epochs=epochs, show=100, goal=0.01)
 net.save('model-' + str(epochs) + '.net')
