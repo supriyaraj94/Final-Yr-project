@@ -7,7 +7,7 @@ else:
 	print "Command line argument missing! Input model's filename..."
 	sys.exit()
 
-with open("inp_tar.p", "rb") as inptarfile:
+with open("n-pq.p", "rb") as inptarfile:
 	data, target = pickle.load(inptarfile)
 
 net = nl.load(model)
