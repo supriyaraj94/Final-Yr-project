@@ -36,7 +36,7 @@ def fitness_func( chromosome ):
 			score=0
 	except:
 		a=''
-	print(str(p)+" "+str(q)+" "+str(score))					
+	#print(str(p)+" "+str(q)+" "+str(score))					
 	return score
 
 def ConvergenceCriteria(ga_engine):
@@ -67,6 +67,6 @@ if __name__ == '__main__':
 	ga.setMultiProcessing( flag = False, full_copy = False )	
 	ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
 	ga.initialize()
-	ga.evolve( freq_stats = 1)
+	ga.evolve( freq_stats = 1000)
 	print( ga.bestIndividual() )
 

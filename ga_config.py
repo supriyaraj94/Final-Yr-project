@@ -22,7 +22,7 @@ print(len(prime_list))
 number_of_primes=len(prime_list)
 
 
-generation_count = 1000
+generation_count = 100000
 elitism = 1
 crossover_rate = 0.6
 mutation_rate = 0.5

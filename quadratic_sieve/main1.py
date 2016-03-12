@@ -1,3 +1,6 @@
+#Haven't found echelon form here...
+
+
 import math
 from primesieve import *
 from sympy import *
@@ -121,65 +124,53 @@ a_base,b_base,factor_matrix=compute_a(b_smooth_sequence,n)
 #print(())
 write_matrix_to_file(factor_matrix)
 
-#print((factor_matrix))
+factor_padding=len(factor_matrix)-len(factor_base)
+new_factor_matrix=[]
 
-'''
-Find row reduced echelon form
-'''
-sympy_mat=Matrix(factor_matrix).T
-echelon=sympy_mat.rref();
-#print(echelon)
-#print(b_base)
-pivotal_numbers=echelon[1]
-#print(pivotal_numbers)
-#print("Pivots:"+str(len(pivotal_numbers)))
-'''Remove non-pivotal columns'''
+print(len(a_base))
+print(len(factor_base))
 
-new_a_base=[a_base[x] for x in pivotal_numbers]
-new_b_base=[b_base[x] for x in pivotal_numbers]
-new_factor_matrix=[factor_matrix[x] for x in pivotal_numbers]
-write_matrix_to_file(new_factor_matrix)
-#print(new_a_base)
 '''
 Padding zeroes to obt square matrix
 '''
-padding=len(factor_base)-len(new_factor_matrix)
-for i in range(padding):
-    l=[0 for x in range(len(factor_base))]
-    new_factor_matrix.append(l)
+
+for i in range(len(factor_matrix)):
+    b=[0 for x in range(factor_padding)]
+    a=factor_matrix[i][:]
+    new_factor_matrix.append(a+b)
+
 
 
 b = np.array(new_factor_matrix).transpose()
-bsol = GF2inv(b)
-print(len(bsol[1]))
+bsol = inv(b)
+print(len(bsol))
 #print(new_b_base)
 
 
 soln_vectors=[]
-for vector in bsol[1]:
-    vector=vector[0:len(factor_base)-padding]
+for vector in bsol:
     if(sum(vector)==0):
         continue
-    check=[0 for x in factor_base]
+    check=[0 for x in vector]
     pro_b=1
     pro_a=1
     for i in range(len(vector)):
         if(vector[i]==1):
-            pro_b*=new_b_base[i]
-            pro_a*=new_a_base[i]
-            for j in range(len(factor_base)):
+            
+            pro_b*=b_base[i]
+            pro_a*=a_base[i]
+            for j in range(len(vector)):
                 check[j]=(check[j] + new_factor_matrix[i][j])%2
     if(sum(check)==0):
         print("******")
-        print(check)
-        print(vector)
-        print(pro_b)
-        print(pro_a)            
+        #print(check)
+        #print(vector)
+        #print(pro_b)
+        #print(pro_a)            
         a=isqrt(pro_b)
         b=pro_a
         print(gcd(a+b,n))
         print(gcd(a-b,n))
-
 
 
 

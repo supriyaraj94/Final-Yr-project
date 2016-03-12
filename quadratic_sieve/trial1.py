@@ -15,12 +15,15 @@ from itertools import chain, combinations
 
 import numpy as np
 from scipy import ndimage
+from sympy import *
 
 class GF2(object):
     """Galois field GF(2)."""
     
     def __init__(self, a=0):
         self.value = int(a) & 1
+    def __abs__(self):
+        return self.value    
     
     def __add__(self, rhs):
         return GF2(self.value + GF2(rhs).value)
@@ -28,10 +31,14 @@ class GF2(object):
     def __mul__(self, rhs):
         return GF2(self.value * GF2(rhs).value)
     
+    def __float__(self):
+        return self    
+    
     def __sub__(self, rhs):
         return GF2(self.value - GF2(rhs).value)
     
     def __div__(self, rhs):
+
         return GF2(self.value / GF2(rhs).value)
     
     def __repr__(self):
@@ -61,6 +68,7 @@ class GF2(object):
 
 GF2array = np.vectorize(GF2)
 
+
 def gjel(A):
     """Gauss-Jordan elimination."""
     nulldim = 0
@@ -86,9 +94,14 @@ def GF2inv(A):
     
     A = np.hstack([A, np.eye(n)])
     B, nulldim = gjel(GF2array(A))
+    print(GF2array(A))
+    print("Done with gjel");
+    print A
+    print B
+    print nulldim
+    print
     #print(B)
     #print(nulldim)
-    inverse = np.int_(B[-n:, -n:])
     E = B[:n, :n]
     null_vectors = []
     if nulldim > 0:
@@ -96,56 +109,25 @@ def GF2inv(A):
         null_vectors[-nulldim:, :] = GF2array(np.eye(nulldim))
         null_vectors = np.int_(null_vectors.T)
     
-    return inverse, null_vectors
+    return null_vectors
 
-def lightsoutbase(n):
-    """Base of the LightsOut problem of size (n,n)"""
-    a = np.eye(n*n)
-    a = np.reshape(a, (n*n,n,n))
-    a = np.array(map(ndimage.binary_dilation, a))
-    return np.reshape(a, (n*n, n*n))
 
-def powerset(iterable):
-    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
-    s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
-
-class LightsOut(object):
-    """Lights-Out solver."""
+def inv(A):
+    """Inversion and eigenvectors of the null-space of a GF2 matrix."""
+    n = len(A)
+    #assert n == A.shape[1], "Matrix must be square"
     
-    def __init__(self, size=5):
-        self.n = size
-        self.base = lightsoutbase(self.n)
-        self.invbase, self.null_vectors = GF2inv(self.base)
+    #A = np.hstack([A, np.eye(n)])
+    B, nulldim = gjel(GF2array(A))
+    #print(gauss_jordan(GF2array(A)))
+    E = B[:n, :n]
+    null_vectors = []
+    if nulldim > 0:
+        null_vectors = E[:, -nulldim:]
+        null_vectors[-nulldim:, :] = GF2array(np.eye(nulldim))
+        null_vectors = np.int_(null_vectors.T)
     
-    def solve(self, b):
-        b = np.asarray(b)
-        assert b.shape[0] == b.shape[1] == self.n, "incompatible shape"
-        
-        if not self.issolvable(b):
-            raise ValueError, "The given setup is not solvable"
-        
-        # Find the base solution.
-        first = np.dot(self.invbase, b.ravel()) & 1
-        
-        # Given a solution, we can find more valid solutions
-        # adding any combination of the null vectors.
-        # Find the solution with the minimum number of 1's.
-        solutions = [(first + reduce(add, nvs, 0))&1 for nvs in powerset(self.null_vectors)]
-        final = min(solutions, key=lambda x: x.sum())
-        return np.reshape(final, (self.n,self.n))
-    
-    def issolvable(self, b):
-        """Determine if the given configuration is solvable.
-        
-        A configuration is solvable if it is orthogonal to
-        the null vectors of the base.
-        """
-        b = np.asarray(b)
-        assert b.shape[0] == b.shape[1] == self.n, "incompatible shape"
-        b = b.ravel()
-        p = map(lambda x: np.dot(x,b)&1, self.null_vectors)
-        return not any(p)
+    return null_vectors
     
 
 def main():

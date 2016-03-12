@@ -1,8 +1,64 @@
 #!python
 import numpy as np
 from numpy.linalg import svd
+from sympy import *
+
+class GF2(object):
+    """Galois field GF(2)."""
+    
+    def __init__(self, a=0):
+        self.value = int(a) & 1
+    
+    def __add__(self, rhs):
+        return GF2(self.value + GF2(rhs).value)
+    
+    def __mul__(self, rhs):
+        return GF2(self.value * GF2(rhs).value)
+    
+    def __sub__(self, rhs):
+        return GF2(self.value - GF2(rhs).value)
+    
+    def __div__(self, rhs):
+        return GF2(self.value / GF2(rhs).value)
+    
+    def __repr__(self):
+        return str(self.value)
+    
+    def __eq__(self, rhs):
+        if isinstance(rhs, GF2):
+            return self.value == rhs.value
+        return self.value == rhs
+    
+    def __le__(self, rhs):
+        if isinstance(rhs, GF2):
+            return self.value <= rhs.value
+        return self.value <= rhs
+    
+    def __lt__(self, rhs):
+        if isinstance(rhs, GF2):
+            return self.value <= rhs.value
+        return self.value < rhs
+    
+    def __int__(self):
+        return self
+
+    def __float__(self):
+        return GF2(super(GF2, self).__float__(self.value))
+
+    
+    def __long__(self):
+        return self
+        
+def nspace(list):
+    newlist=[]
+    for l in list:
+        temp=[GF2(ele) for ele in l]
+        newlist.append(temp)
+    print(Matrix(newlist).nullspace())    
 
 
+
+   
 def rank(A, atol=1e-13, rtol=0):
     """Estimate the rank (i.e. the dimension of the nullspace) of a matrix.
 
@@ -79,8 +135,13 @@ def nullspace(A, atol=1e-13, rtol=0):
         zero.
     """
 
-    A = np.atleast_2d(A)
+    #A = np.atleast_2d(A)
     u, s, vh = svd(A)
+    print(u)
+    u=np.array(u,dtype=np.dtype('bool'))
+    print(s)
+    s=np.array(s,dtype=np.dtype('bool'))
+    vh=np.array(vh,dtype=np.dtype('bool'))
     tol = max(atol, rtol * s[0])
     nnz = (s >= tol).sum()
     ns = vh[nnz:].conj().T

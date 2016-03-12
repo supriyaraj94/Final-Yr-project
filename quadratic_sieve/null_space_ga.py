@@ -4,6 +4,7 @@ from pyevolve import GAllele
 from pyevolve import Mutators
 from pyevolve import Initializators
 from pyevolve import Crossovers
+from pyevolve import Selectors
 from pyevolve import Consts
 import sys, random
 from math import sqrt
@@ -31,7 +32,15 @@ def eval_func(chromosome):
          s=[(x + y)%2 for x, y in zip(s, matrix[i])] 
    #print(sum(s))           
    return sum(s)
-  
+
+
+def selector_method(population, **args):
+  p=random.random()
+  if(p>=0.5):
+    population= Selectors.GTournamentSelectorAlternative(population,**args)
+  else:
+    population= Selectors.GRankSelector(population,**args)
+  return population  
 
    
 def main_run():
@@ -58,9 +67,9 @@ def main_run():
    genome.evaluator.set(eval_func)
    genome.mutator.set(Mutators.G1DListMutatorAllele)
    genome.initializator.set(Initializators.G1DListInitializatorAllele)
-   
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setGenerations(1000)
+   ga.setGenerations(100000)
+   ga.selector.set( selector_method )
    ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
    ga.setMinimax(Consts.minimaxType["minimize"])
    ga.setCrossoverRate(1.0)
