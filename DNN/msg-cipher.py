@@ -7,6 +7,10 @@ from rsa.bigfile import *
 from rsa import key, common, pkcs1, varblock
 from rsa._compat import byte
 
+from bitstring import BitArray
+
+BITS = 8 # number of bits that constitute a byte
+
 inpfile = sys.argv[1]
 outfile = sys.argv[2]
 
@@ -21,14 +25,27 @@ priv_key = rsa.PrivateKey.load_pkcs1(keydata)
 with open(inpfile, 'rb') as infile, open(outfile, 'wb') as oufile:
 	encrypt_bigfile(infile, oufile, pub_key)
 
+key_bytes = common.byte_size(pub_key.n) * BITS
+padding_bytes = 11 * BITS
+
 messages = []
 ciphers = []
 with open(outfile, 'rb') as oufile:
 	for block in varblock.yield_varblocks(oufile):
 		cleartext = pkcs1.decrypt(block, priv_key)
-		messages.append(cleartext)
-		ciphers.append(block)
+
+		message = BitArray(bytes=cleartext).bin
+		cipher = BitArray(bytes=block).bin
+		
+		if len(message) == (key_bytes - padding_bytes):
+			messages.append(message)
+			ciphers.append(cipher)
 
 training_dataset = (messages, ciphers)
 with open("m2c_training_dataset.p", "wb") as f:
 	pickle.dump(training_dataset, f)
+
+for m, c in zip(messages, ciphers):
+	print "M: ", m
+	print "C: ", c
+	print "-" * 50
