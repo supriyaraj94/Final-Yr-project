@@ -34,7 +34,7 @@ size = [(num_input_units + num_output_units) * 2 / 3, num_output_units]
 inp = inp.reshape(1, num_input_units)
 tar = tar.reshape(1, num_output_units)
 
-with open("n-pq.p", "wb") as inptarfile:
+with open("npq_data.p", "wb") as inptarfile:
 	pickle.dump((inp, tar), inptarfile)
 
 trans = [nl.trans.TanSig()] * (len(size) - 1) + [nl.trans.LogSig()]
