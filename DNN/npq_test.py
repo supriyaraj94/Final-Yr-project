@@ -1,5 +1,8 @@
 # This script takes N2PQ ANN model's filename as command line argument
-import neurolab as nl, cPickle as pickle, sys
+import neurolab as nl, cPickle as pickle, sys, numpy as np
+
+def discretize(alist):
+	return np.array([0 if x < 0.5 else 1 for x in alist])
 
 if len(sys.argv) != 1:
 	model = sys.argv[1]
@@ -13,5 +16,5 @@ with open("n-pq.p", "rb") as inptarfile:
 net = nl.load(model)
 test = net.sim(data)
 
-print "Expected: ", target
-print "Generated: ", test
+print " Expected: ", target[0]
+print "Generated: ", discretize(test[0])

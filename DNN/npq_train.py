@@ -37,17 +37,15 @@ tar = tar.reshape(1, num_output_units)
 with open("n-pq.p", "wb") as inptarfile:
 	pickle.dump((inp, tar), inptarfile)
 
+trans = [nl.trans.TanSig()] * (len(size) - 1) + [nl.trans.LogSig()]
 # Create network with n layers
-net = nl.net.newff(minmax, size)
+net = nl.net.newff(minmax, size, transf=trans)
 
-# Change traning func
-net.trainf = nl.train.train_gd
+# Change traning func, by default uses train_bfgs
+#net.trainf = nl.train.train_gd
 
 # Change error func, by default uses SSE()
 #net.errorf = nl.error.MSE()
-
-# Change trans funs
-#net.layers[-1].transf = nl.trans.SatLinPrm(k=1, out_min=0, out_max=9)
 
 if len(sys.argv) != 1:
 	epochs = int(sys.argv[1])
