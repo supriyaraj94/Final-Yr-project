@@ -1,7 +1,7 @@
 # This script takes input and output filename as command line arguments
 # Example: python msg_cipher.py inpfile outfile
 
-import rsa, sys, cPickle as pickle
+import rsa, sys, cPickle as pickle, numpy as np
 from rsa.bigfile import *
 
 from rsa import key, common, pkcs1, varblock
@@ -38,8 +38,11 @@ with open(outfile, 'rb') as oufile:
 		cipher = BitArray(bytes=block).bin
 		
 		if len(message) == (key_bytes - padding_bytes):
-			messages.append(message)
-			ciphers.append(cipher)
+			messages.append(np.array(map(int, message)))
+			ciphers.append(np.array(map(int, cipher)))
+
+messages = np.array(messages)
+ciphers = np.array(ciphers)
 
 training_dataset = (messages, ciphers)
 with open("m2c_training_dataset.p", "wb") as f:
