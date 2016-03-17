@@ -16,5 +16,12 @@ with open("npq_data.p", "rb") as inptarfile:
 net = nl.load(model)
 test = net.sim(data)
 
-print " Expected: ", target[0]
-print "Generated: ", discretize(test[0])
+exp = target[0]
+gen = discretize(test[0])
+print " Expected: ", exp
+print "Generated: ", gen
+
+if (exp == gen).all():
+	print "\nSame"
+else:
+	print "\nNot same"
