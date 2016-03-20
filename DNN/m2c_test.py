@@ -17,6 +17,13 @@ with open("m2c_test_dataset.p", "rb") as inptarfile:
 net = nl.load(model)
 test = net.sim(data)
 
-print " Expected: ", target[0]
-print "Generated: ", discretize(test[0])
+total = len(data)
+count = 0.0
+for x in xrange(total):
+	exp = target[x]
+	gen = discretize(test[x])
+	if (exp == gen).all():
+		count += 1
+
+print "Accuracy: ", 100 * count / total
 print "----- %s seconds -----" % (time.time() - start_time)

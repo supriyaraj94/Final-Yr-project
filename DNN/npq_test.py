@@ -1,4 +1,4 @@
-# This script takes Keypair ANN model's filename as command line argument
+# This script takes n2pq ANN model's filename as command line argument
 import neurolab as nl, cPickle as pickle, sys, numpy as np, time
 start_time = time.time()
 
@@ -11,20 +11,19 @@ else:
 	print "Command line argument missing! Input model's filename..."
 	sys.exit()
 
-with open("keypair_data.p", "rb") as inptarfile:
+with open("npq_test_dataset.p", "rb") as inptarfile:
 	data, target = pickle.load(inptarfile)
 
 net = nl.load(model)
 test = net.sim(data)
 
-exp = target[0]
-gen = discretize(test[0])
-print " Expected: ", exp
-print "Generated: ", gen
+total = len(data)
+count = 0.0
+for x in xrange(total):
+	exp = target[x]
+	gen = discretize(test[x])
+	if (exp == gen).all():
+		count += 1
 
-if (exp == gen).all():
-	print "\nSame"
-else:
-	print "\nNot same"
-
+print "Accuracy: ", 100 * count / total
 print "----- %s seconds -----" % (time.time() - start_time)
