@@ -33,4 +33,5 @@ with open("npq_training_dataset.p", "wb") as f:
 	pickle.dump(training_dataset, f)
 
 print "# Bits: ", nbits
+print "# Samples: ", nsamples
 print "----- %s seconds -----" % (time.time() - start_time)
