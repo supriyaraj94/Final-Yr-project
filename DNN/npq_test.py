@@ -17,13 +17,26 @@ with open("npq_test_dataset.p", "rb") as inptarfile:
 net = nl.load(model)
 test = net.sim(data)
 
+# Sample wise... Bit wise
 total = len(data)
-count = 0.0
+nbits = len(data[0])
+scount = 0.0
+bcount = 0.0
 for x in xrange(total):
 	exp = target[x]
 	gen = discretize(test[x])
 	if (exp == gen).all():
-		count += 1
+		scount += 1
 
-print "Accuracy: ", 100 * count / total
+	for y in xrange(nbits):
+		if exp[y] == gen[y]:
+			bcount += 1
+
+print "*" * 50
+print "Sample Wise Accuracy: ", 100 * scount / total
+print "*" * 50
+print "Bit Wise Accuracy: ", 100 * bcount / (total * nbits)
+print "*" * 50
+
 print "----- %s seconds -----" % (time.time() - start_time)
+print "*" * 50
