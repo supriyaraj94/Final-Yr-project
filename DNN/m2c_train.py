@@ -5,6 +5,7 @@ start_time = time.time()
 with open("m2c_rsa_generate.p", "rb") as f:
 	inp, tar = pickle.load(f)
 
+inp, tar = inp[:1000], tar[:1000]
 num_input_units = len(inp[0])
 num_output_units = len(tar[0])
 minmax = [[0, 1]] * num_input_units
