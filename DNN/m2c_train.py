@@ -2,7 +2,7 @@
 import neurolab as nl, numpy as np, cPickle as pickle, sys, time
 start_time = time.time()
 
-with open("m2c_training_dataset.p", "rb") as f:
+with open("m2c_rsa_generate.p", "rb") as f:
 	inp, tar = pickle.load(f)
 
 num_input_units = len(inp[0])
