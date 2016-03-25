@@ -123,7 +123,7 @@ Change formats for finding null_space
 a_base,b_base,factor_matrix=compute_a(b_smooth_sequence,n)
 #print(())
 
-
+write_matrix_to_file(factor_matrix)
 factor_padding=len(factor_matrix)-len(factor_base)
 new_factor_matrix=[]
 
@@ -139,7 +139,7 @@ for i in range(len(factor_matrix)):
     a=factor_matrix[i][:]
     new_factor_matrix.append(a+b)
 
-write_matrix_to_file(new_factor_matrix)
+#write_matrix_to_file(new_factor_matrix)
 
 b = np.array(new_factor_matrix).transpose()
 bsol = inv(b)
