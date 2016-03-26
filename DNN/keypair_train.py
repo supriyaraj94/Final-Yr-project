@@ -62,7 +62,7 @@ print "#Output Units: ", num_output_units
 print "*" * 50
 
 # Train network
-error = net.train(inp, tar, epochs=epochs, show=1, goal=0.01)
+error = net.train(inp, tar, epochs=epochs, show=1, goal=0.000001)
 net.save('keypair-model-' + str(epochs) + '.net')
 
 print "----- %s seconds -----" % (time.time() - start_time)
