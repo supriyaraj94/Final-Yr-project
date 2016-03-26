@@ -23,4 +23,9 @@ for x in xrange(p_count):
 			semiprimes.append(product)
 
 pickle.dump( (semiprimes, factors), open( "semiprimes_factors.p", "wb" ) )
+
+print "*" * 50
+print "#Prime Factor Digits: ", sys.argv[1]
+print "*" * 50
 print "----- %s seconds -----" % (time.time() - start_time)
+print "*" * 50

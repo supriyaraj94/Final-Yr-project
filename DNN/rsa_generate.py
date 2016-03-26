@@ -108,7 +108,7 @@ def encode(msg, pubkey, verbose=False):
         #if verbose: print('Encode:', chunksize, chunk, plain, coded, bcoded)
         result.append(coded)
         chunks.append(chunk)
-    return result,chunks
+    return chunksize, result, chunks
 
 def decode(bcipher, privkey, verbose=False):
     chunksize = int(log(pubkey.modulus, 256))
@@ -136,8 +136,8 @@ if __name__ == '__main__':
     with open(filename, "r") as inpfile:
     	data = inpfile.read()
 
-    ciphers, messages = encode(data, pubkey, 1)
-    ciphers, messages = cipher2binary(ciphers, 128), message2binary(messages, 16)
+    chunksize, ciphers, messages = encode(data, pubkey, 1)
+    ciphers, messages = cipher2binary(ciphers, 128), message2binary(messages, chunksize * 8)
 
     training_dataset = (messages, ciphers)
     with open("m2c_rsa_generate.p", "wb") as f:
@@ -149,4 +149,10 @@ if __name__ == '__main__':
     	print "C: ", cipher
     	print "-" * 50
     '''
+    print "*" * 50
+    print "Message Bits: ", chunksize * 8
+    print " Cipher Bits: ", 128
+    print " Sample Size: ", len(ciphers)
+    print "*" * 50
     print "----- %s seconds -----" % (time.time() - start_time)
+    print "*" * 50

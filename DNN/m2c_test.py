@@ -33,8 +33,10 @@ for x in xrange(total):
 			bcount += 1
 
 print "*" * 50
+print "            #Samples: ", total
 print "Sample Wise Accuracy: ", 100 * scount / total
 print "*" * 50
+print "            #Bits: ", total * nbits
 print "Bit Wise Accuracy: ", 100 * bcount / (total * nbits)
 print "*" * 50
 

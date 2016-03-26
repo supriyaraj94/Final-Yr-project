@@ -48,10 +48,15 @@ ciphers = np.array(ciphers)
 training_dataset = (messages, ciphers)
 with open("m2c_training_dataset.p", "wb") as f:
 	pickle.dump(training_dataset, f)
-
+'''
 for m, c in zip(messages, ciphers):
 	print "M: ", m
 	print "C: ", c
 	print "-" * 50
-
+'''
+print "*" * 50
+print " Sample Size: ", len(messages)
+print "Message Bits: ", len(messages[0])
+print " Cipher Bits: ", len(ciphers[0])
 print "----- %s seconds -----" % (time.time() - start_time)
+print "*" * 50
