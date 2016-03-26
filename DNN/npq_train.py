@@ -9,7 +9,7 @@ num_input_units = len(inp[0])
 num_output_units = len(tar[0])
 minmax = [[0, 1]] * num_input_units
 # One of the thumb rule to set nh = 2/3 * (ni + no)
-size = [(num_input_units + num_output_units) * 2 / 3, num_output_units]
+size = [(num_input_units + num_output_units) * 3 / 5, num_output_units]
 
 inp = inp.reshape(len(inp), num_input_units)
 tar = tar.reshape(len(tar), num_output_units)
@@ -29,7 +29,16 @@ if len(sys.argv) != 1:
 else:
 	epochs = 500
 
+print "*" * 50
+print "      #Epochs: ", epochs
+print "     #Samples: ", len(inp)
+print " #Input Units: ", num_input_units
+print "#Hidden Units: ", size[0]
+print "#Output Units: ", num_output_units
+print "*" * 50
+
 # Train network
-error = net.train(inp, tar, epochs=epochs, show=1, goal=0.00001)
+error = net.train(inp, tar, epochs=epochs, show=1, goal=0.01)
 net.save('npq-model-' + str(epochs) + '.net')
 print "----- %s seconds -----" % (time.time() - start_time)
+print "*" * 50

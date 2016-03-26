@@ -32,6 +32,9 @@ training_dataset = (inp, tar)
 with open("npq_training_dataset.p", "wb") as f:
 	pickle.dump(training_dataset, f)
 
-print "# Bits: ", nbits
-print "# Samples: ", nsamples
+print "*" * 50
+print "   #Bits: ", nbits
+print "#Samples: ", nsamples
+print "*" * 50
 print "----- %s seconds -----" % (time.time() - start_time)
+print "*" * 50
