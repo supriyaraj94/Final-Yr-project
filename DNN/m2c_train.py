@@ -10,7 +10,7 @@ num_input_units = len(inp[0])
 num_output_units = len(tar[0])
 minmax = [[0, 1]] * num_input_units
 # One of the thumb rule to set nh = 2/3 * (ni + no)
-size = [(num_input_units + num_output_units) * 3 / 5, num_output_units]
+size = [(num_input_units + num_output_units) / 3, num_output_units]
 
 inp = inp.reshape(len(inp), num_input_units)
 tar = tar.reshape(len(tar), num_output_units)
