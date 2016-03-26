@@ -17,5 +17,7 @@ with open('public.pem', mode='wb') as publicfile:
 with open('private.pem', mode='wb') as privatefile:
 	privatefile.write(pri_key_data)
 
-print "# Bits: ", nbits
+print "*" * 50
+print "#Bits: ", nbits
 print "----- %s seconds -----" % (time.time() - start_time)
+print "*" * 50

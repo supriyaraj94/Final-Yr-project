@@ -19,12 +19,16 @@ test = net.sim(data)
 
 exp = target[0]
 gen = discretize(test[0])
+
+print "*" * 50
 print " Expected: ", exp
 print "Generated: ", gen
 
 if (exp == gen).all():
-	print "\nSame"
+	print "\nSame!!!"
 else:
-	print "\nNot same"
+	print "\nNot same!!!"
 
+print "*" * 50
 print "----- %s seconds -----" % (time.time() - start_time)
+print "*" * 50
