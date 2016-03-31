@@ -1,0 +1,78 @@
+focus_column=0
+focus_row=0
+threadLock=0
+matrix=[]
+weight=[]
+ns=[]
+go_flag=0
+import threading
+
+def find_null_space(m,rows,cols,mask_length):
+	global matrix
+	global threadLock
+	global focus_column
+	global focus_row
+	global weight
+	global ns
+	global go_flag
+	matrix=m
+	weight=[0 for ele in m]
+	ns=weight[:]
+	threadLock = threading.Lock()
+	thread_count=int(rows/100);
+	last_thread_ele_count=rows-100*thread_count
+
+	#Update go_flag
+	t_list=[]
+	for i in range(0,thread_count):
+		thread1 = check_go(i*100,100)
+		thread1.start()
+		t_list.append(thread1)	
+	thread1=check_go(100*thread_count,last_thread_ele_count)	
+	thread1.start()
+	t_list.append(thread1)
+	for t in t_list:
+		t.join()
+	
+
+
+	#if there is atleast one 1 in the column so as to find the pivot
+	if(go_flag==1):
+		weight=ns[:]
+		t_list=[]
+		for k in range(mask_length-1,-1,-1):
+
+
+		
+
+	
+
+
+#thread to update go_flag
+class check_go(threading.Thread):
+    def __init__(self,st,num):
+    	threading.Thread.__init__(self)
+        self.st=st
+        self.num=num
+    def run(self):
+    	global go_flag
+    	global ns
+    	fl=0
+    	for i in range(self.st,self.st+self.num):    		
+    		fl=fl or matrix[i]['ele'][focus_column]
+    		ns[i]=matrix[i]['ele'][focus_column]
+    	threadLock.acquire()
+    	go_flag=go_flag or fl
+    	threadLock.release()	
+
+
+
+#thread to find the pivot in each column
+class findPivot (threading.Thread):
+    def __init__(self,st,end):
+        self.st=st
+        self.end=end
+    def run(self):
+    	a=0
+   	
+        
