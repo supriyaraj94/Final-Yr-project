@@ -245,6 +245,8 @@ def encrypt(message, modN, e, blockSize):
     RSA algorithms."""
     numList = string2numList(message)
     numBlocks = numList2blocks(numList, blockSize)
+    print "numblocks are "
+    print numBlocks
     return [modExp(blocks, e, modN) for blocks in numBlocks]
 
 
@@ -257,12 +259,15 @@ def decrypt(secret, modN, d, blockSize):
 def block_size(val):
     try:
         v = int(val)
-        assert(v >= 10 and v <= 1000)
+        assert(v >= 8 and v <= 1000)
     except:
         raise argparse.ArgumentTypeError("{} is not a valid block size".format(val))
     return val
 
 if __name__ == '__main__':
+    print "Enter the range"
+    a = long(input("first number "))
+    b = long(input("last number"))
     parser = argparse.ArgumentParser()
 
     group = parser.add_mutually_exclusive_group(required=True)
@@ -274,8 +279,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-
-    n, e, d = newKey(10 ** 100, 10 ** 101, 50)
+    n, e, d = newKey(a, b, 50)
 
     if args.message is not None:
         message = args.message
@@ -285,11 +289,16 @@ if __name__ == '__main__':
             message = args.file.read()
         finally:
             args.file.close()
-
-    print "original message is {}".format(message)
-    print "-"*80
-    cipher = encrypt(message, n, e, 15)
-    print "cipher text is {}".format(cipher)
-    print "-"*80
-    deciphered = decrypt(cipher, n, d, 15)
-    print "decrypted message is {}".format(deciphered)
+    message_list = []
+    tot_len = len(message)
+    chunk_size = 8
+    message_list = [message[i:i+chunk_size] for i in range(0, tot_len, chunk_size)]
+    f = open('reults.txt','w')
+    for me in message_list:
+        f.write("original message is {}".format(me))
+        f.write( "\n"+"-"*80+"\n")
+        cipher = encrypt(me, n, e, 16)
+        f.write( "cipher text is {}".format(cipher))
+        f.write( "\n"+"-"*80+"\n")
+        deciphered = decrypt(cipher, n, d, 16)
+        f.write("\n")
