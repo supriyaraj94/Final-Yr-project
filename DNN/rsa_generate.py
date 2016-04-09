@@ -3,6 +3,7 @@ from random import randrange
 from collections import namedtuple
 from math import log
 from binascii import hexlify, unhexlify
+import rsa
 
 def is_prime(n, k=30):
     # http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
@@ -63,8 +64,9 @@ def multinv(modulus, value):
 KeyPair = namedtuple('KeyPair', 'public private')
 Key = namedtuple('Key', 'exponent modulus')
 
+'''
 def keygen(N, public=None):
-    ''' Generate public and private keys from primes up to N.
+    #<start> Generate public and private keys from primes up to N.
 
     Optionally, specify the public key exponent (65537 is popular choice).
 
@@ -74,7 +76,7 @@ def keygen(N, public=None):
         >>> plain = pow(coded, *privkey)
         >>> assert msg == plain
 
-    '''
+    #<end>
     # http://en.wikipedia.org/wiki/RSA
     prime1 = randprime(N)
     prime2 = randprime(N)
@@ -91,9 +93,33 @@ def keygen(N, public=None):
     assert public * private % totient == gcd(public, totient) == gcd(private, totient) == 1
     assert pow(pow(1234567, public, composite), private, composite) == 1234567
     return KeyPair(Key(public, composite), Key(private, composite))
+'''
+
+def keygen(public=None):
+    with open('public.pem', mode='rb') as publicfile:
+        keydata = publicfile.read()
+    pubkey = rsa.PublicKey.load_pkcs1(keydata)
+
+    with open('private.pem', mode='rb') as privatefile:
+        keydata = privatefile.read()
+    privkey = rsa.PrivateKey.load_pkcs1(keydata)
+
+    composite = pubkey.n
+    prime1 = privkey.p
+    prime2 = privkey.q
+    totient = (prime1 - 1) * (prime2 - 1)
+    if public is None:
+        while True:
+            private = randrange(totient)
+            if gcd(private, totient) == 1:
+                break
+        public = multinv(totient, private)
+    else:
+        private = multinv(totient, public)
+    return KeyPair(Key(public, composite), Key(private, composite))
 
 def encode(msg, pubkey, verbose=False):
-    chunksize = int(log(pubkey.modulus, 256))
+    chunksize = int(log(pubkey.modulus, 256))+1
     outchunk = chunksize + 1
     outfmt = '%%0%dx' % (outchunk * 2,)
     bmsg = msg.encode()
@@ -111,7 +137,7 @@ def encode(msg, pubkey, verbose=False):
     return chunksize, result, chunks
 
 def decode(bcipher, privkey, verbose=False):
-    chunksize = int(log(pubkey.modulus, 256))
+    chunksize = int(log(pubkey.modulus, 256)) + 1
     outchunk = chunksize + 1
     outfmt = '%%0%dx' % (chunksize * 2,)
     result = []
@@ -122,6 +148,7 @@ def decode(bcipher, privkey, verbose=False):
     return b''.join(result).rstrip(b'\x00').decode()
 
 if __name__ == '__main__':
+	
     import sys, cPickle as pickle, time
     from util_rsa_generate import *
 
@@ -132,18 +159,18 @@ if __name__ == '__main__':
     	print "Command line argument: input filename missing!"
     	sys.exit()
 
-    pubkey, privkey = keygen(2 ** 64)
+    pubkey, privkey = keygen()
     with open(filename, "r") as inpfile:
     	data = inpfile.read()
 
     chunksize, ciphers, messages = encode(data, pubkey, 1)
-    ciphers, messages = cipher2binary(ciphers, 128), message2binary(messages, chunksize * 8)
+    ciphers, messages = cipher2binary(ciphers, chunksize * 8), message2binary(messages, chunksize * 8)
 
     training_dataset = (messages, ciphers)
     with open("m2c_rsa_generate.p", "wb") as f:
     	pickle.dump(training_dataset, f)
 
-    '''
+    '''    
     for msg, cipher in zip(messages, ciphers):
     	print "M: ", msg
     	print "C: ", cipher
@@ -151,7 +178,7 @@ if __name__ == '__main__':
     '''
     print "*" * 50
     print "Message Bits: ", chunksize * 8
-    print " Cipher Bits: ", 128
+    print " Cipher Bits: ", chunksize * 8
     print " Sample Size: ", len(ciphers)
     print "*" * 50
     print "----- %s seconds -----" % (time.time() - start_time)

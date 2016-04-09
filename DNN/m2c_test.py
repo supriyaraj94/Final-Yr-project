@@ -11,9 +11,11 @@ else:
 	print "Command line argument missing! Input model's filename..."
 	sys.exit()
 
-with open("m2c_test_dataset.p", "rb") as inptarfile:
+with open("m2c_rsa_generate.p", "rb") as inptarfile:
 	data, target = pickle.load(inptarfile)
 
+data = data[2000:2100]
+target = target[2000:2100]
 net = nl.load(model)
 test = net.sim(data)
 
