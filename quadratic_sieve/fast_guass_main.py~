@@ -128,12 +128,12 @@ b_smooth_sequence=filter_b_smooth(Xsqr_minus_N_sequence,factor_base)
 print(len(factor_base))
 print(len(b_smooth_sequence))
 #Finding the null space
-+m35..ed
+
 '''
 Change formats for finding null_space
 '''
 a_base,b_base,factor_matrix,fast_guass,mask_length=compute_a(b_smooth_sequence,n)
-find_null_space(fast_guass,len(a_base),len(factor_base),mask_length,n)
+find_null_space(fast_guass,len(a_base),len(factor_base),mask_length)
 write_matrix_to_file(factor_matrix)
 #print(fast_guass)
 

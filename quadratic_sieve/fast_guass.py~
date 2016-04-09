@@ -10,7 +10,7 @@ import threading
 import math
 from fractions import gcd
 
-def find_null_space(m,rows,cols,n):
+def find_null_space(m,rows,cols,mask_length):
 	global matrix
 	global threadLock
 	global focus_column
@@ -95,13 +95,14 @@ def find_null_space(m,rows,cols,n):
 		t.join()
 
 
-	#print(matrix)
+	print(matrix)
 
 	for ele in matrix:
 		pro_a=1
 		pro_b=1
 		a=1
 		b=1
+		n=37315319
 		if(ele['u']==0):
 			for i in range(0,cols):
 				if(ele['ele'][i]==1):
@@ -111,12 +112,9 @@ def find_null_space(m,rows,cols,n):
 			pro_b*=ele['b']		
 			a=isqrt(pro_b)
         	b=pro_a
-        	c=gcd(a-b,n)
-        	d=gcd(a+b,n)
-        	if(c!=1 and d!=1):
-        		print(c)
-        		print(d)
-        		break        
+        	print(gcd(a+b,n))
+        	print(gcd(a-b,n))
+        	print("***")
 
 		
 
