@@ -5,6 +5,8 @@ from pyevolve import DBAdapters
 import sys
 import timeit
 from after_ga import *
+#from graph import *
+
 
 # Import Configuration Settings
 from ga_config import *
@@ -78,8 +80,8 @@ if __name__ == '__main__':
 	ga.setGenerations( generation_count )	
 	ga.setMultiProcessing( flag = False, full_copy = False )	
 	ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
-    	sqlite_adapter = DBAdapters.DBSQLite(identify="ex1",resetDB=True)
-    	ga.setDBAdapter(sqlite_adapter)
+    	#sqlite_adapter = DBAdapters.DBSQLite(identify="ex1",resetDB=True)
+    	#ga.setDBAdapter(sqlite_adapter)
 	ga.initialize()
 	try:
 		ga.evolve( freq_stats = 1)
@@ -96,6 +98,7 @@ if __name__ == '__main__':
 		num1 = str(target/long(num2))
 	print( final_genome )
 	stop = timeit.default_timer()
+    	os.system('python graph.py '+str(num1)+' '+str(num2)+' '+str(pq)+' '+str(rs)+' &')
 	if(found != 1):
 		find_primes(long(num1),long(num2),target,stop-start)
 	print ("Number of digits : "+str(len(str(target))))

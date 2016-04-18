@@ -6,9 +6,10 @@ from pyevolve import Mutators
 from primesieve import *
 import random
 import math
+import sys
 from pyevolve import Util
-pq = long(input("Enter num1 "))
-rs = long(input("Enter num2 "))
+pq = long( sys.argv[1] )
+rs = long( sys.argv[2] )
 target = pq*rs
 list_width=int(math.ceil(len(str(target))/2.0));
 list_height=2;
@@ -30,7 +31,7 @@ mutation_rate = 0.5
 
 minimax = Consts.minimaxType["minimize"]
 
-selector_method = Selectors.GTournamentSelector
+#selector_method = Selectors.GTournamentSelector
 #mutator_method = Mutators.G2DListMutatorSwap
 #crossover_method=Crossovers.G2DListCrossoverUniform
 last_digits=dict()
@@ -38,7 +39,8 @@ last_digits[1]=[[1,1],[3,7],[7,3]]
 last_digits[3]=[[1,3],[3,1],[9,7],[7,9]]
 last_digits[7]=[[1,7],[7,1],[9,3],[3,9]]
 last_digits[9]=[[1,9],[9,1],[3,3]]
-
+lower = math.pow(10,list_width-1)
+upper = math.pow(10,list_width)
 
 def initializator_method(genome, **args):
     genome.clearList()
@@ -53,8 +55,8 @@ def initializator_method(genome, **args):
             break 
     '''       
     f = long(pow(target,0.5))
-    p = random.randint(math.pow(10,list_width-1),f)
-    q = random.randint(f,math.pow(10,list_width))
+    p = generate_n_primes(1,random.randint(lower,f))[0]
+    q = generate_n_primes(1,random.randint(f,upper))[0]
     l=[]
     l.append( [int(char) for char in str(p)])
     l.append( [int(char) for char in str(q)])
