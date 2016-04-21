@@ -5,7 +5,6 @@ start_time = time.time()
 with open("m2c_rsa_generate.p", "rb") as f:
 	inp, tar = pickle.load(f)
 
-inp, tar = inp[:1000], tar[:1000]
 num_input_units = len(inp[0])
 num_output_units = len(tar[0])
 minmax = [[0, 1]] * num_input_units
@@ -17,8 +16,8 @@ tar = tar.reshape(len(tar), num_output_units)
 
 trans = [nl.trans.TanSig()] * (len(size) - 1) + [nl.trans.LogSig()]
 # Create network with n layers
-#net = nl.net.newff(minmax, size, transf=trans)
-net = nl.load(raw_input('Model name: '))
+net = nl.net.newff(minmax, size, transf=trans)
+#net = nl.load(raw_input('Model name: '))
 
 # Change traning func, by default uses train_bfgs
 #net.trainf = nl.train.train_gd
@@ -41,7 +40,7 @@ print "         Goal: ", 0.000001
 print "*" * 50
 
 # Train network
-error = net.train(inp, tar, epochs=epochs, show=1, goal=0.000001)
+error = net.train(inp, tar, epochs=epochs, show=1, goal=0.01)
 net.save('m2c-model-' + str(epochs) + '.net')
 print "----- %s seconds -----" % (time.time() - start_time)
 print "*" * 50
