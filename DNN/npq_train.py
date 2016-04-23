@@ -2,6 +2,11 @@
 import neurolab as nl, numpy as np, cPickle as pickle, sys, time
 start_time = time.time()
 
+if len(sys.argv) != 1:
+	epochs = int(sys.argv[1])
+else:
+	epochs = 500
+
 with open("npq_training_dataset.p", "rb") as f:
 	inp, tar = pickle.load(f)
 
@@ -16,30 +21,27 @@ tar = tar.reshape(len(tar), num_output_units)
 
 trans = [nl.trans.TanSig()] * (len(size) - 1) + [nl.trans.LogSig()]
 # Create network with n layers
-#net = nl.net.newff(minmax, size, transf=trans)
-net = nl.load('npq-model-10000.net')
+net = nl.net.newff(minmax, size, transf=trans)
+#net = nl.load('npq-model-10000.net')
 
 # Change traning func, by default uses train_bfgs
-#net.trainf = nl.train.train_gd
+net.trainf = nl.train.train_gdx  # Gradient descent with momentum backpropagation and adaptive lr
 
 # Change error func, by default uses SSE()
 #net.errorf = nl.error.MSE()
-
-if len(sys.argv) != 1:
-	epochs = int(sys.argv[1])
-else:
-	epochs = 500
+goal = 0.01
 
 print "*" * 50
-print "      #Epochs: ", epochs
 print "     #Samples: ", len(inp)
-print " #Input Units: ", num_input_units
+print "      #Epochs: ", epochs
+print " #Input Units: ", net.ci
 print "#Hidden Units: ", size[0]
-print "#Output Units: ", num_output_units
+print "#Output Units: ", net.co
+print "#        Goal: ", goal
 print "*" * 50
 
 # Train network
-error = net.train(inp, tar, epochs=epochs, show=1, goal=0.01)
+error = net.train(inp, tar, epochs=epochs, show=1, goal=goal, lr=0.01, adapt=False, lr_inc=1.05, lr_dec=0.7, max_perf_inc=1.04, mc=0.9, rr=0.0)
 net.save('npq-model-' + str(epochs) + '.net')
 print "----- %s seconds -----" % (time.time() - start_time)
 print "*" * 50

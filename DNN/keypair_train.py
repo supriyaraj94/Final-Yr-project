@@ -6,6 +6,11 @@ from rsa import common
 start_time = time.time()
 BITS = 8 # number of bits that constitute a byte
 
+if len(sys.argv) != 1:
+	epochs = int(sys.argv[1])
+else:
+	epochs = 500
+	
 with open('public.pem', mode='rb') as publicfile:
 	keydata = publicfile.read()
 pubkey = rsa.PublicKey.load_pkcs1(keydata)
@@ -47,11 +52,6 @@ net = nl.net.newff(minmax, size, transf=trans)
 
 # Change error func, by default uses SSE()
 #net.errorf = nl.error.MSE()
-
-if len(sys.argv) != 1:
-	epochs = int(sys.argv[1])
-else:
-	epochs = 500
 
 print "*" * 50
 print "      #Epochs: ", epochs
