@@ -37,7 +37,7 @@ print "      #Epochs: ", epochs
 print " #Input Units: ", net.ci
 print "#Hidden Units: ", size[0]
 print "#Output Units: ", net.co
-print "#        Goal: ", goal
+print "        #Goal: ", goal
 print "*" * 50
 
 # Train network
