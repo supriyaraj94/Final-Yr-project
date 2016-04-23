@@ -24,7 +24,7 @@ trans = [nl.trans.TanSig()] * (len(size) - 1) + [nl.trans.LogSig()]
 net = nl.net.newff(minmax, size, transf=trans)
 
 # Change traning func, by default uses train_bfgs
-net.trainf = nl.train.train_gdx  # Gradient descent with momentum backpropagation and adaptive lr
+#net.trainf = nl.train.train_gdx  # Gradient descent with momentum backpropagation and adaptive lr
 
 npq_net = nl.load(raw_input('Model name: '))
 net.layers[0].np['w'][:] = npq_net.layers[0].np['w'][:]
@@ -47,7 +47,8 @@ print "             Goal: ", goal
 print "*" * 50
 
 # Train network
-error = net.train(inp, tar, epochs=epochs, show=1, goal=goal, lr=0.01, adapt=False, lr_inc=1.05, lr_dec=0.7, max_perf_inc=1.04, mc=0.9, rr=0.0)
+#error = net.train(inp, tar, epochs=epochs, show=1, goal=goal, lr=0.01, adapt=False, lr_inc=1.05, lr_dec=0.7, max_perf_inc=1.04, mc=0.9, rr=0.0)
+error = net.train(inp, tar, epochs=epochs, show=1, goal=goal)
 net.save('m2c-model-' + str(epochs) + '.net')
 print "----- %s seconds -----" % (time.time() - start_time)
 print "*" * 50
