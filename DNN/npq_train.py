@@ -21,8 +21,8 @@ tar = tar.reshape(len(tar), num_output_units)
 
 trans = [nl.trans.TanSig()] * (len(size) - 1) + [nl.trans.LogSig()]
 # Create network with n layers
-net = nl.net.newff(minmax, size, transf=trans)
-#net = nl.load('npq-model-10000.net')
+#net = nl.net.newff(minmax, size, transf=trans)
+net = nl.load(raw_input('Model name: '))
 
 # Change traning func, by default uses train_bfgs
 #net.trainf = nl.train.train_gdx  # Gradient descent with momentum backpropagation and adaptive lr

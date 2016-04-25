@@ -21,12 +21,13 @@ tar = tar.reshape(len(tar), num_output_units)
 
 trans = [nl.trans.TanSig()] * (len(size) - 1) + [nl.trans.LogSig()]
 # Create network with n layers
-net = nl.net.newff(minmax, size, transf=trans)
+#net = nl.net.newff(minmax, size, transf=trans)
+net = nl.load(raw_input('Model name: '))
 
 # Change traning func, by default uses train_bfgs
 #net.trainf = nl.train.train_gdx  # Gradient descent with momentum backpropagation and adaptive lr
 
-npq_net = nl.load(raw_input('Model name: '))
+npq_net = nl.load(raw_input('NPQ Model name: '))
 net.layers[0].np['w'][:] = npq_net.layers[0].np['w'][:]
 net.layers[0].np['b'][:] = npq_net.layers[0].np['b'][:]
 
@@ -38,7 +39,7 @@ goal = 0.01
 print "*" * 50
 print "#Training Samples: ", len(inp)
 print "          #Epochs: ", epochs
-print "          #Layers: ", len(net.layers)
+print "          #Layers: ", len(net.layers) + 1
 print "     #Input Units: ", net.ci
 print "  #Hidden Units 1: ", size[0]
 print "  #Hidden Units 2: ", size[1]
@@ -48,6 +49,7 @@ print "*" * 50
 
 # Train network
 #error = net.train(inp, tar, epochs=epochs, show=1, goal=goal, lr=0.01, adapt=False, lr_inc=1.05, lr_dec=0.7, max_perf_inc=1.04, mc=0.9, rr=0.0)
+print "Training..."
 error = net.train(inp, tar, epochs=epochs, show=1, goal=goal)
 net.save('m2c-model-' + str(epochs) + '.net')
 print "----- %s seconds -----" % (time.time() - start_time)
